@@ -21,6 +21,10 @@ namespace MonoP
         private GameDevice gameDevice;
         private Renderer renderer;
 
+        private SceneManager sceneManager;
+        public static float deltaTime;    //ゲーム全体のスピード
+
+
         /// <summary>
         /// コンストラクタ
         /// （new で実体生成された際、一番最初に一回呼び出される）
@@ -44,10 +48,13 @@ namespace MonoP
         /// </summary>
         protected override void Initialize()
         {
+            deltaTime = 0;
             // この下にロジックを記述
-            gameDevice = GameDevice.Instance(Content, GraphicsDevice); 
-
-
+            gameDevice = GameDevice.Instance(Content, GraphicsDevice);
+            sceneManager = new SceneManager();
+            sceneManager.Add(Scene.LoadScene, new LoadScene());
+            sceneManager.Add(Scene.Title, new Title());
+            sceneManager.Change(Scene.LoadScene);
             // この上にロジックを記述
             base.Initialize();// 親クラスの初期化処理呼び出し。絶対に消すな！！
         }
@@ -99,9 +106,11 @@ namespace MonoP
                 Exit();
             }
 
+            deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             // この下に更新ロジックを記述
             gameDevice.Update(gameTime);
-
+            sceneManager.Update(gameTime);
 
 
             // この上にロジックを記述
@@ -118,7 +127,7 @@ namespace MonoP
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // この下に描画ロジックを記述
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            sceneManager.Draw(renderer);
 
             //この上にロジックを記述
             base.Draw(gameTime); // 親クラスの更新処理呼び出し。絶対に消すな！！
