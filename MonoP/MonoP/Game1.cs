@@ -71,9 +71,9 @@ namespace MonoP
             renderer = gameDevice.GetRenderer();
 
             // この下にロジックを記述
-            Texture2D fade = new Texture2D(GraphicsDevice, 1, 1);
-            Color[] colors = new Color[1 * 1];
-            colors[0] = new Color(1, 1, 0);
+            Texture2D fade = new Texture2D(GraphicsDevice, 32, 32);
+            Color[] colors = new Color[32 * 32];
+            colors[0] = new Color(0, 0, 0);
             fade.SetData(colors);
             renderer.LoadContent("f", fade);
 
