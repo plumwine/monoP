@@ -16,7 +16,10 @@ namespace MonoP
     {
         // フィールド（このクラスの情報を記述）
         private GraphicsDeviceManager graphicsDeviceManager;//グラフィックスデバイスを管理するオブジェクト
-        private SpriteBatch spriteBatch;//画像をスクリーン上に描画するためのオブジェクト
+       // private SpriteBatch spriteBatch;//画像をスクリーン上に描画するためのオブジェクト
+
+        private GameDevice gameDevice;
+        private Renderer renderer;
 
         /// <summary>
         /// コンストラクタ
@@ -28,6 +31,9 @@ namespace MonoP
             graphicsDeviceManager = new GraphicsDeviceManager(this);
             //コンテンツデータ（リソースデータ）のルートフォルダは"Contentに設定
             Content.RootDirectory = "Content";
+
+            graphicsDeviceManager.PreferredBackBufferWidth = 1000;
+            graphicsDeviceManager.PreferredBackBufferHeight = 600;
         }
 
         //テスト
@@ -39,7 +45,7 @@ namespace MonoP
         protected override void Initialize()
         {
             // この下にロジックを記述
-
+            gameDevice = GameDevice.Instance(Content, GraphicsDevice); 
 
 
             // この上にロジックを記述
@@ -53,10 +59,16 @@ namespace MonoP
         protected override void LoadContent()
         {
             // 画像を描画するために、スプライトバッチオブジェクトの実体生成
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            //spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            renderer = gameDevice.GetRenderer();
 
             // この下にロジックを記述
-
+            Texture2D fade = new Texture2D(GraphicsDevice, 1, 1);
+            Color[] colors = new Color[1 * 1];
+            colors[0] = new Color(1, 1, 0);
+            fade.SetData(colors);
+            renderer.LoadContent("f", fade);
 
             // この上にロジックを記述
         }
@@ -88,6 +100,9 @@ namespace MonoP
             }
 
             // この下に更新ロジックを記述
+            gameDevice.Update(gameTime);
+
+
 
             // この上にロジックを記述
             base.Update(gameTime); // 親クラスの更新処理呼び出し。絶対に消すな！！
@@ -103,7 +118,7 @@ namespace MonoP
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // この下に描画ロジックを記述
-
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
             //この上にロジックを記述
             base.Draw(gameTime); // 親クラスの更新処理呼び出し。絶対に消すな！！
